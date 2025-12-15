@@ -1,0 +1,23 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+}
+
+/* | Element          | Color     |
+| ---------------- | --------- |
+| App Background   | `#F9FBFA` |
+| Cards            | `#FFFFFF` |
+| Primary Button   | `#2E7D32` |
+| Button Text      | `#FFFFFF` |
+| Secondary Button | `#E8F5E9` |
+| Active Nav       | `#2E7D32` |
+| Icons (default)  | `#4B5563` |
+| Divider          | `#E0E0E0` | */

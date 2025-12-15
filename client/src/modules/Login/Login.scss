@@ -1,0 +1,134 @@
+.loginPage {
+  height: 100dvh;
+  width: 100dvw;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 32px;
+  color: #1f2933;
+  background-color: #f9fbfa;
+
+  h1 {
+    font-family: "Inter", sans-serif;
+    font-size: 42px;
+    font-weight: 700;
+    margin-bottom: 16px;
+  }
+
+  main {
+    flex: 1;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 44px;
+
+    .banner {
+      img {
+        height: 20rem;
+        width: 26rem;
+      }
+    }
+
+    .loginContainer {
+      height: 460px;
+      width: 540px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background-color: #fff;
+      border-radius: 40px;
+      border: 1px solid #e0e0e0;
+      margin: auto;
+      flex-direction: column;
+      gap: 54px;
+      padding: 32px 16px;
+
+      .loginHeader {
+        font-family: "Inter", sans-serif;
+
+        .loginTitle {
+          font-size: 32px;
+          font-weight: 600;
+          color: #333;
+        }
+
+        .loginSubtitle {
+          font-size: 14px;
+          font-weight: 400;
+          color: #666;
+          margin-top: 8px;
+        }
+      }
+
+      .loginForm {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 320px;
+
+        .field {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: flex-start;
+
+          label {
+            font-size: 14px;
+            font-weight: 500;
+            color: #333;
+            margin-bottom: 8px;
+            font-family: "Inter", sans-serif;
+          }
+
+          input {
+            width: 300px;
+            height: 40px;
+            padding: 8px 12px;
+            border: 1px solid #ccc;
+            border-radius: 40px;
+            font-size: 14px;
+            margin-bottom: 16px;
+
+            &:focus {
+              border-color: #2e7d32;
+              outline: none;
+              box-shadow: 0 0 5px #e8f5e9;
+            }
+          }
+
+          .error {
+            color: #d32f2f;
+            font-size: 12px;
+            font-family: "Inter", sans-serif;
+            margin-top: -12px;
+            margin-bottom: 8px;
+          }
+        }
+
+        button {
+          width: 320px;
+          height: 40px;
+          background-color: #2e7d32;
+          color: #fff;
+          font-size: 16px;
+          font-weight: 500;
+          border: none;
+          border-radius: 40px;
+          cursor: pointer;
+          transition: background-color 0.3s ease;
+
+          &:hover {
+            background-color: #25692c;
+          }
+
+          &:disabled {
+            background-color: #a5d6a7;
+            cursor: not-allowed;
+          }
+        }
+      }
+    }
+  }
+}
