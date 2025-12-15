@@ -11,7 +11,7 @@ const Login = () => {
       <main>
         <div className="banner">
           <img src={AuthenticationSvg} alt="" />
-          <span>Quick sign-in to schedule your pickup</span>
+          <p className="bannerText">Quick sign-in to schedule your pickup</p>
         </div>
 
         <div className="loginContainer">
@@ -26,7 +26,7 @@ const Login = () => {
 
         <div className="banner">
           <img src={DeliveryTruckSvg} alt="" />
-          <span>We’re ready to pick up your waste</span>
+          <p className="bannerText">We’re ready to pick up your waste</p>
         </div>
       </main>
     </div>
