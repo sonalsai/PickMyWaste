@@ -2,7 +2,11 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import "./Navbar.scss";
 
-const Navbar = ({ showLinks = false }) => {
+const Navbar = ({
+  showLinks = false,
+  buttonText = "Register",
+  buttonLink = "/register",
+}) => {
   const navigate = useNavigate();
 
   return (
@@ -70,12 +74,9 @@ const Navbar = ({ showLinks = false }) => {
         )}
 
         <div className="actions">
-          <button
-            className="register-btn"
-            onClick={() => navigate("/register")}
-          >
-            <span className="btn-text">Register</span>
-            <span className="btn-arrow">Register &rarr;</span>
+          <button className="register-btn" onClick={() => navigate(buttonLink)}>
+            <span className="btn-text">{buttonText}</span>
+            <span className="btn-arrow">{buttonText} &rarr;</span>
           </button>
         </div>
       </div>
