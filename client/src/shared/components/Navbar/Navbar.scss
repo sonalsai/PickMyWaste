@@ -1,0 +1,139 @@
+.app-navbar {
+  width: 100%;
+  height: 64px;
+  background-color: #ffffff;
+  border-bottom: 1px solid #e0e0e0;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0 32px;
+
+  // Ensure edge-to-edge feel, no rounded card look
+  box-shadow: none;
+
+  .navbar-content {
+    width: 100%;
+    max-width: 1440px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    .logo-section {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: #2e7d32;
+
+      .logo-icon {
+        width: 24px;
+        height: 24px;
+        // Inherits color
+      }
+
+      .brand-name {
+        font-family: "Inter", system-ui, sans-serif;
+        font-weight: 700; // Bold but not heavy
+        font-size: 20px;
+        color: #1a202c;
+        letter-spacing: -0.01em;
+      }
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 32px;
+
+      a {
+        text-decoration: none;
+        color: #4b5563;
+        font-family: "Inter", system-ui, sans-serif;
+        font-weight: 500;
+        font-size: 14px;
+        transition: color 0.2s;
+
+        &:hover {
+          color: #2e7d32;
+        }
+      }
+    }
+
+    .actions {
+      .register-btn {
+        height: 40px;
+        padding: 0 24px;
+        border: 2px solid #2e7d32; // Slightly thicker border as requested
+        border-radius: 999px; // Fully rounded
+        background-color: transparent;
+        color: #2e7d32;
+        font-family: "Inter", system-ui, sans-serif;
+        font-weight: 600;
+        font-size: 14px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        &:hover {
+          background-color: #f1f8e9; // Soft green tint
+        }
+
+        &:active {
+          transform: scale(0.98);
+        }
+
+        .btn-text {
+          display: block;
+        }
+        .btn-arrow {
+          display: none;
+        }
+      }
+    }
+  }
+
+  // Mobile Styles
+  @media (max-width: 767px) {
+    height: 56px; // Shorter header on mobile
+    padding: 0 16px;
+
+    .navbar-content {
+      .logo-section {
+        .brand-name {
+          font-size: 18px;
+        }
+      }
+
+      .nav-links {
+        display: none; // Hide extra links on mobile
+      }
+
+      .actions {
+        .register-btn {
+          border: none;
+          padding: 0;
+          height: auto;
+          color: #2e7d32;
+          font-size: 14px;
+          border-radius: 0;
+
+          &:hover {
+            background: transparent;
+            text-decoration: underline;
+          }
+
+          .btn-text {
+            display: none;
+          }
+          .btn-arrow {
+            display: block;
+            white-space: nowrap;
+          }
+        }
+      }
+    }
+  }
+}

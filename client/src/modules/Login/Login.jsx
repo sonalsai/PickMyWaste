@@ -2,6 +2,7 @@ import "./Login.scss";
 import LoginForm from "./LoginForm";
 import AuthenticationSvg from "../../assets/images/undraw_authentication.svg";
 import DeliveryTruckSvg from "../../assets/images/undraw_delivery-truck.svg";
+import Navbar from "../../shared/components/Navbar/Navbar";
 import { useNavigate } from "react-router-dom";
 
 const Login = () => {
@@ -9,14 +10,7 @@ const Login = () => {
 
   return (
     <div className="loginPage">
-      <header>
-        <div className="navbar">
-          <h1>Pick My Waste</h1>
-          <button className="registerBtn" onClick={() => navigate("/register")}>
-            Register
-          </button>
-        </div>
-      </header>
+      <Navbar showLinks={true} />
       <main>
         <div className="banner left-banner">
           <img src={AuthenticationSvg} alt="" />

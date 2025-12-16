@@ -14,8 +14,6 @@ const LoginForm = () => {
     // call API here
   };
 
-  console.log(isSubmitting);
-
   return (
     <form className="loginForm" onSubmit={handleSubmit(onSubmit)}>
       {/* Username */}
