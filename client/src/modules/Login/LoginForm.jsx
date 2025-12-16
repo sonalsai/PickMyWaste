@@ -1,6 +1,10 @@
 import { useForm } from "react-hook-form";
 import TextField from "../../shared/components/TextField/TextField";
 import PasswordField from "../../shared/components/PasswordField/PasswordField";
+import { FiUser, FiLock } from "react-icons/fi";
+import { FcGoogle } from "react-icons/fc";
+import { BsFacebook } from "react-icons/bs";
+import "./LoginForm.scss";
 
 const LoginForm = () => {
   const {
@@ -14,14 +18,24 @@ const LoginForm = () => {
     // call API here
   };
 
+  const handleGoogleLogin = () => {
+    console.log("Google login clicked");
+    // Implement Google OAuth
+  };
+
+  const handleFacebookLogin = () => {
+    console.log("Facebook login clicked");
+    // Implement Facebook OAuth
+  };
+
   return (
     <form className="loginForm" onSubmit={handleSubmit(onSubmit)}>
-      {/* Username */}
       {/* Username */}
       <TextField
         id="username"
         label="Username"
         autoComplete="username"
+        icon={<FiUser />}
         error={errors.username?.message}
         {...register("username", {
           required: "Username is required",
@@ -41,6 +55,7 @@ const LoginForm = () => {
         id="password"
         label="Password"
         autoComplete="current-password"
+        icon={<FiLock />}
         error={errors.password?.message}
         {...register("password", {
           required: "Password is required",
@@ -52,9 +67,34 @@ const LoginForm = () => {
       />
 
       {/* Submit */}
-      <button type="submit" disabled={!isValid}>
+      <button type="submit" disabled={!isValid} className="primary-btn">
         {isSubmitting ? "Signing in..." : "Sign in"}
       </button>
+
+      {/* Divider */}
+      <div className="divider">
+        <span>or continue with</span>
+      </div>
+
+      {/* Social Login Options */}
+      <div className="social-login">
+        <button
+          type="button"
+          className="social-btn google"
+          onClick={handleGoogleLogin}
+        >
+          <FcGoogle size={20} />
+          <span>Google</span>
+        </button>
+        <button
+          type="button"
+          className="social-btn facebook"
+          onClick={handleFacebookLogin}
+        >
+          <BsFacebook size={20} color="#1877f2" />
+          <span>Facebook</span>
+        </button>
+      </div>
     </form>
   );
 };
