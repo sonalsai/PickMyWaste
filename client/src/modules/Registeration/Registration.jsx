@@ -13,6 +13,7 @@ const Registration = () => {
   const navigate = useNavigate();
   const [selectedRole, setSelectedRole] = useState("user"); // Auto-select user
   const [currentStep, setCurrentStep] = useState(0);
+  const [selectedLocation, setSelectedLocation] = useState(null);
 
   const {
     register,
@@ -23,7 +24,7 @@ const Registration = () => {
   } = useForm();
 
   const steps = {
-    user: ["Account Info", "Location", "Consent"],
+    user: ["Account Info", "Address Details", "Location Marking", "Consent"],
     picker: [
       "Personal Info",
       "Service Area",
@@ -50,7 +51,14 @@ const Registration = () => {
           ];
           break;
         case 1:
-          fieldsToValidate = ["address", "city", "pincode"];
+          fieldsToValidate = ["addressLine1", "city", "state", "pincode"];
+          break;
+        case 2:
+          // Location marking step - validate location is selected
+          if (!selectedLocation) {
+            return; // Don't proceed if no location selected
+          }
+          fieldsToValidate = [];
           break;
         default:
           break;
@@ -195,6 +203,10 @@ const Registration = () => {
                       register={register}
                       errors={errors}
                       watch={watch}
+                      selectedLocation={selectedLocation}
+                      setSelectedLocation={setSelectedLocation}
+                      totalSteps={currentSteps.length}
+                      stepName={currentSteps[currentStep]}
                     />
                   </motion.div>
                 )}
@@ -242,8 +254,15 @@ const Registration = () => {
                 )}
 
                 {currentStep < currentSteps.length - 1 ? (
-                  <button type="button" onClick={onNext} className="nextBtn">
-                    Next →
+                  <button
+                    type="button"
+                    onClick={onNext}
+                    className="nextBtn"
+                    disabled={currentStep === 2 && !selectedLocation}
+                  >
+                    {currentStep === 2 && !selectedLocation
+                      ? "Select location to continue"
+                      : "Continue →"}
                   </button>
                 ) : (
                   <button type="submit" className="submitBtn">

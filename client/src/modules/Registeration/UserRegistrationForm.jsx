@@ -12,8 +12,43 @@ import {
 } from "react-icons/fi";
 import "./RegistrationForm.scss";
 
-const UserRegistrationForm = ({ currentStep, register, errors, watch }) => {
+const UserRegistrationForm = ({
+  currentStep,
+  register,
+  errors,
+  watch,
+  selectedLocation,
+  setSelectedLocation,
+  totalSteps,
+  stepName,
+}) => {
   const password = watch("password");
+
+  // Mock function to simulate location selection
+  const handleSelectLocation = () => {
+    // This would open a map modal in real implementation
+    // For now, we'll simulate a location selection
+    setSelectedLocation({
+      address: "MG Road, Indiranagar",
+      city: "Bengaluru",
+      accuracy: "High",
+      coordinates: { lat: 12.9716, lng: 77.5946 },
+    });
+  };
+
+  const handleUseCurrentLocation = () => {
+    // This would use geolocation API in real implementation
+    setSelectedLocation({
+      address: "Current Location",
+      city: "Bengaluru",
+      accuracy: "High",
+      coordinates: { lat: 12.9716, lng: 77.5946 },
+    });
+  };
+
+  const handleChangeLocation = () => {
+    setSelectedLocation(null);
+  };
 
   return (
     <div className="formContent">
@@ -21,6 +56,15 @@ const UserRegistrationForm = ({ currentStep, register, errors, watch }) => {
       {currentStep === 0 && (
         <div className="formStep">
           <div className="formSection">
+            {/* Step Indicator */}
+            <div className="stepIndicator">
+              <span className="stepNumber">
+                Step {currentStep + 1} of {totalSteps}
+              </span>
+              <span className="stepDivider">—</span>
+              <span className="stepTitle">{stepName}</span>
+            </div>
+
             <TextField
               id="fullName"
               label="Full Name"
@@ -103,20 +147,35 @@ const UserRegistrationForm = ({ currentStep, register, errors, watch }) => {
       {currentStep === 1 && (
         <div className="formStep">
           <div className="formSection">
-            <h3>Pickup Location</h3>
+            {/* Step Indicator */}
+            <div className="stepIndicator">
+              <span className="stepNumber">
+                Step {currentStep + 1} of {totalSteps}
+              </span>
+              <span className="stepDivider">—</span>
+              <span className="stepTitle">{stepName}</span>
+            </div>
 
             <TextField
-              id="address"
-              label="Address Line"
+              id="addressLine1"
+              label="Address Line 1"
               icon={<FiMapPin />}
-              error={errors.address?.message}
-              {...register("address", {
-                required: "Address is required",
+              error={errors.addressLine1?.message}
+              {...register("addressLine1", {
+                required: "Address Line 1 is required",
                 minLength: {
-                  value: 10,
+                  value: 5,
                   message: "Please enter a complete address",
                 },
               })}
+            />
+
+            <TextField
+              id="addressLine2"
+              label="Address Line 2 (Optional)"
+              icon={<FiMapPin />}
+              error={errors.addressLine2?.message}
+              {...register("addressLine2")}
             />
 
             <div className="formRow">
@@ -129,34 +188,133 @@ const UserRegistrationForm = ({ currentStep, register, errors, watch }) => {
               />
 
               <TextField
-                id="pincode"
-                label="Pincode"
-                icon={<FiMapPin />}
-                error={errors.pincode?.message}
-                {...register("pincode", {
-                  required: "Pincode is required",
-                  pattern: {
-                    value: /^[0-9]{6}$/,
-                    message: "Invalid pincode",
-                  },
-                })}
+                id="state"
+                label="State"
+                icon={<FiMap />}
+                error={errors.state?.message}
+                {...register("state", { required: "State is required" })}
               />
             </div>
 
-            <div className="mapPinNote">
-              <p>📍 Location pin on map (required for accurate pickup)</p>
-              <button type="button" className="mapBtn">
-                Select Location on Map
-              </button>
-            </div>
+            <TextField
+              id="pincode"
+              label="Pincode"
+              icon={<FiMapPin />}
+              error={errors.pincode?.message}
+              {...register("pincode", {
+                required: "Pincode is required",
+                pattern: {
+                  value: /^[0-9]{6}$/,
+                  message: "Invalid pincode (must be 6 digits)",
+                },
+              })}
+            />
           </div>
         </div>
       )}
 
-      {/* Step 2: Consent */}
+      {/* Step 2: Location Marking */}
       {currentStep === 2 && (
         <div className="formStep">
+          <div className="formSection locationSection">
+            {/* Step Indicator */}
+            <div className="stepIndicator">
+              <span className="stepNumber">
+                Step {currentStep + 1} of {totalSteps}
+              </span>
+              <span className="stepDivider">—</span>
+              <span className="stepTitle">{stepName}</span>
+            </div>
+
+            {!selectedLocation ? (
+              <>
+                {/* Improved Microcopy - Benefit Driven */}
+                <div className="locationInstructions">
+                  <FiMapPin className="instructionIcon" />
+                  This helps our picker reach you without calls or delays
+                </div>
+
+                {/* Primary CTA */}
+                <div className="locationActions">
+                  <button
+                    type="button"
+                    className="locationBtn primary"
+                    onClick={handleSelectLocation}
+                  >
+                    <FiMapPin />
+                    Select Pickup Location
+                  </button>
+
+                  {/* Secondary Option */}
+                  <button
+                    type="button"
+                    className="locationBtn secondary"
+                    onClick={handleUseCurrentLocation}
+                  >
+                    <FiMap />
+                    Use Current Location
+                  </button>
+                </div>
+
+                {/* Trust Signal */}
+                <div className="trustSignal">
+                  🔒 Location is used only for pickup coordination
+                </div>
+              </>
+            ) : (
+              <>
+                {/* Location Confirmation Card */}
+                <div className="locationConfirmation">
+                  <div className="confirmationHeader">
+                    <FiMapPin className="confirmIcon" />
+                    <h4>Pickup Location Selected</h4>
+                  </div>
+
+                  <div className="locationDetails">
+                    <p className="locationAddress">
+                      <strong>Near:</strong> {selectedLocation.address},{" "}
+                      {selectedLocation.city}
+                    </p>
+                    <p className="locationAccuracy">
+                      <strong>Accuracy:</strong>{" "}
+                      <span className="accuracyBadge">
+                        {selectedLocation.accuracy}
+                      </span>
+                    </p>
+                  </div>
+
+                  <button
+                    type="button"
+                    className="changeLocationBtn"
+                    onClick={handleChangeLocation}
+                  >
+                    Change Location
+                  </button>
+                </div>
+
+                {/* Success Tip */}
+                <div className="locationTip success">
+                  ✓ Great! Your picker will find you easily
+                </div>
+              </>
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* Step 3: Consent */}
+      {currentStep === 3 && (
+        <div className="formStep">
           <div className="formSection">
+            {/* Step Indicator */}
+            <div className="stepIndicator">
+              <span className="stepNumber">
+                Step {currentStep + 1} of {totalSteps}
+              </span>
+              <span className="stepDivider">—</span>
+              <span className="stepTitle">{stepName}</span>
+            </div>
+
             <h3>Terms & Conditions</h3>
 
             <label className="checkboxLabel">
