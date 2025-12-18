@@ -21,6 +21,7 @@ const Registration = () => {
     handleSubmit,
     watch,
     trigger,
+    setValue,
     formState: { errors, isValid },
   } = useForm({
     mode: "onChange",
@@ -46,10 +47,10 @@ const Registration = () => {
       ["agreeTerms"],
     ],
     picker: [
-      ["fullName", "mobile", "password", "confirmPassword"],
+      ["fullName", "email", "mobile", "password", "confirmPassword"],
       ["city", "operatingArea"],
       [], // Availability (optional checkboxes)
-      ["idType", "idNumber"],
+      ["idType", "idNumber", "idDocument"],
       ["agreeTerms", "consentLocation"],
     ],
   };
@@ -233,6 +234,7 @@ const Registration = () => {
                       register={register}
                       errors={errors}
                       watch={watch}
+                      setValue={setValue}
                       totalSteps={currentSteps.length}
                       stepName={currentSteps[currentStep]}
                     />
