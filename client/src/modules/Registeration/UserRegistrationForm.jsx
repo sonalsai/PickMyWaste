@@ -9,7 +9,12 @@ import {
   FiLock,
   FiMapPin,
   FiMap,
+  FiNavigation,
+  FiSearch,
+  FiArrowUpRight,
 } from "react-icons/fi";
+import currentLocationSvg from "../../assets/images/undraw_current-location.svg";
+import myCurrenrLocationSvg from "../../assets/images/undraw_my-current-location.svg";
 import "./RegistrationForm.scss";
 
 const UserRegistrationForm = ({
@@ -25,7 +30,7 @@ const UserRegistrationForm = ({
   const password = watch("password");
 
   // Mock function to simulate location selection
-  const handleSelectLocation = () => {
+  const handleSelectManual = () => {
     // This would open a map modal in real implementation
     // For now, we'll simulate a location selection
     setSelectedLocation({
@@ -61,8 +66,6 @@ const UserRegistrationForm = ({
               <span className="stepNumber">
                 Step {currentStep + 1} of {totalSteps}
               </span>
-              <span className="stepDivider">—</span>
-              <span className="stepTitle">{stepName}</span>
             </div>
 
             <TextField
@@ -152,8 +155,6 @@ const UserRegistrationForm = ({
               <span className="stepNumber">
                 Step {currentStep + 1} of {totalSteps}
               </span>
-              <span className="stepDivider">—</span>
-              <span className="stepTitle">{stepName}</span>
             </div>
 
             <TextField
@@ -216,87 +217,69 @@ const UserRegistrationForm = ({
       {/* Step 2: Location Marking */}
       {currentStep === 2 && (
         <div className="formStep">
-          <div className="formSection locationSection">
-            {/* Step Indicator */}
-            <div className="stepIndicator">
-              <span className="stepNumber">
-                Step {currentStep + 1} of {totalSteps}
-              </span>
-              <span className="stepDivider">—</span>
-              <span className="stepTitle">{stepName}</span>
-            </div>
-
+          <div className="locationStepContainer">
             {!selectedLocation ? (
               <>
-                {/* Improved Microcopy - Benefit Driven */}
-                <div className="locationInstructions">
-                  <FiMapPin className="instructionIcon" />
-                  This helps our picker reach you without calls or delays
+                <div className="illustrationArea">
+                  <img
+                    src={currentLocationSvg}
+                    alt="Current Location"
+                    className="locationIllustration"
+                  />
                 </div>
 
-                {/* Primary CTA */}
-                <div className="locationActions">
-                  <button
-                    type="button"
-                    className="locationBtn primary"
-                    onClick={handleSelectLocation}
-                  >
-                    <FiMapPin />
-                    Select Pickup Location
-                  </button>
+                <div className="selectionText">
+                  <h3>Choose your location</h3>
+                  <p>and start recycling with us</p>
+                </div>
 
-                  {/* Secondary Option */}
+                <div className="selectionActions">
                   <button
                     type="button"
-                    className="locationBtn secondary"
+                    className="useCurrentBtn"
                     onClick={handleUseCurrentLocation}
                   >
-                    <FiMap />
-                    Use Current Location
+                    <FiNavigation /> Use My Current Location
                   </button>
-                </div>
 
-                {/* Trust Signal */}
-                <div className="trustSignal">
-                  🔒 Location is used only for pickup coordination
+                  <button
+                    type="button"
+                    className="selectManualLink"
+                    onClick={handleSelectManual}
+                  >
+                    Select It Manually
+                  </button>
                 </div>
               </>
             ) : (
-              <>
-                {/* Location Confirmation Card */}
-                <div className="locationConfirmation">
-                  <div className="confirmationHeader">
-                    <FiMapPin className="confirmIcon" />
-                    <h4>Pickup Location Selected</h4>
-                  </div>
-
-                  <div className="locationDetails">
-                    <p className="locationAddress">
-                      <strong>Near:</strong> {selectedLocation.address},{" "}
-                      {selectedLocation.city}
-                    </p>
-                    <p className="locationAccuracy">
-                      <strong>Accuracy:</strong>{" "}
-                      <span className="accuracyBadge">
-                        {selectedLocation.accuracy}
-                      </span>
-                    </p>
-                  </div>
-
-                  <button
-                    type="button"
-                    className="changeLocationBtn"
-                    onClick={handleChangeLocation}
-                  >
-                    Change Location
-                  </button>
+              <div className="selectedLocationCard">
+                <div className="illustrationArea">
+                  <img
+                    src={myCurrenrLocationSvg}
+                    alt="Delivery Location"
+                    className="locationIllustration"
+                  />
                 </div>
-
-                {/* Success Tip */}
-                <div className="locationTip success">
-                  ✓ Great! Your picker will find you easily
+                <div className="cardHeader">
+                  <FiMapPin />
+                  <h4>Location Selected</h4>
                 </div>
-              </>
+                <div className="cardContent">
+                  <p className="address">{selectedLocation.address}</p>
+                  <p className="city">{selectedLocation.city}</p>
+                  <div className="accuracy">
+                    <span>Accuracy: {selectedLocation.accuracy}</span>
+                  </div>
+                </div>
+                <button
+                  type="button"
+                  className="changeBtn"
+                  onClick={handleChangeLocation}
+                >
+                  Change Location
+                </button>
+                <div className="successBadge">✓ Ready to proceed</div>
+              </div>
             )}
           </div>
         </div>
@@ -311,8 +294,6 @@ const UserRegistrationForm = ({
               <span className="stepNumber">
                 Step {currentStep + 1} of {totalSteps}
               </span>
-              <span className="stepDivider">—</span>
-              <span className="stepTitle">{stepName}</span>
             </div>
 
             <h3>Terms & Conditions</h3>
