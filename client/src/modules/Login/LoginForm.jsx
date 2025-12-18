@@ -70,31 +70,6 @@ const LoginForm = () => {
       <button type="submit" disabled={!isValid} className="primary-btn">
         {isSubmitting ? "Signing in..." : "Sign in"}
       </button>
-
-      {/* Divider */}
-      <div className="divider">
-        <span>or continue with</span>
-      </div>
-
-      {/* Social Login Options */}
-      <div className="social-login">
-        <button
-          type="button"
-          className="social-btn google"
-          onClick={handleGoogleLogin}
-        >
-          <FcGoogle size={20} />
-          <span>Google</span>
-        </button>
-        <button
-          type="button"
-          className="social-btn facebook"
-          onClick={handleFacebookLogin}
-        >
-          <BsFacebook size={20} color="#1877f2" />
-          <span>Facebook</span>
-        </button>
-      </div>
     </form>
   );
 };
