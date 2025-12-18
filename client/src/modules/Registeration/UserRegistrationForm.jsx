@@ -218,6 +218,11 @@ const UserRegistrationForm = ({
       {currentStep === 2 && (
         <div className="formStep">
           <div className="locationStepContainer">
+            <div className="stepIndicator">
+              <span className="stepNumber">
+                Step {currentStep + 1} of {totalSteps}
+              </span>
+            </div>
             {!selectedLocation ? (
               <>
                 <div className="illustrationArea">
@@ -288,34 +293,45 @@ const UserRegistrationForm = ({
       {/* Step 3: Consent */}
       {currentStep === 3 && (
         <div className="formStep">
-          <div className="formSection">
-            {/* Step Indicator */}
+          <div className="consentContainer">
             <div className="stepIndicator">
               <span className="stepNumber">
                 Step {currentStep + 1} of {totalSteps}
               </span>
             </div>
+            <h3>Terms & Privacy</h3>
 
-            <h3>Terms & Conditions</h3>
+            <div className="consentContent">
+              <label className="checkboxLabel">
+                <input
+                  type="checkbox"
+                  {...register("agreeTerms", {
+                    required: "You must agree to the terms and privacy policy",
+                  })}
+                />
+                <span className="checkboxText">
+                  I agree to the Terms & Conditions and Privacy Policy
+                </span>
+              </label>
 
-            <label className="checkboxLabel">
-              <input
-                type="checkbox"
-                {...register("agreeTerms", {
-                  required: "You must agree to the terms and privacy policy",
-                })}
-              />
-              <span>
-                I agree to the{" "}
-                <a href="/terms" target="_blank">
-                  Terms & Conditions
-                </a>{" "}
-                and{" "}
-                <a href="/privacy" target="_blank">
-                  Privacy Policy
-                </a>
-              </span>
-            </label>
+              <div className="descriptionBox">
+                <p className="consentDescription">
+                  By creating an account, you confirm your details are accurate
+                  and agree to use Pick My Waste responsibly. You also consent
+                  to the use of your information for service coordination and
+                  communication.
+                </p>
+              </div>
+
+              <div className="trustLine">
+                <span className="trustIcon">🔒</span>
+                <p>
+                  Your data stays private and is used only to provide our
+                  services.
+                </p>
+              </div>
+            </div>
+
             {errors.agreeTerms && (
               <p className="error">{errors.agreeTerms.message}</p>
             )}

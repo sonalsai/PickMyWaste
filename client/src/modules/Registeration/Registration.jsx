@@ -5,8 +5,9 @@ import { motion, AnimatePresence } from "framer-motion";
 import Navbar from "../../shared/components/Navbar/Navbar";
 import UserRegistrationForm from "./UserRegistrationForm";
 import PickerRegistrationForm from "./PickerRegistrationForm";
-import AuthenticationSvg from "../../assets/images/undraw_authentication.svg";
-import DeliveryTruckSvg from "../../assets/images/undraw_delivery-truck.svg";
+import PersonalInfoSvg from "../../assets/images/undraw_personal-information.svg";
+import CleanUpSvg from "../../assets/images/undraw_clean-up.svg";
+import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
 import "./Registration.scss";
 
 const Registration = () => {
@@ -20,8 +21,10 @@ const Registration = () => {
     handleSubmit,
     watch,
     trigger,
-    formState: { errors },
-  } = useForm();
+    formState: { errors, isValid },
+  } = useForm({
+    mode: "onChange",
+  });
 
   const steps = {
     user: ["Account Info", "Address Details", "Location Marking", "Consent"],
@@ -34,59 +37,60 @@ const Registration = () => {
     ],
   };
 
+  // Field names mapping for each step to handle validation blocking
+  const stepFields = {
+    user: [
+      ["fullName", "email", "mobile", "password", "confirmPassword"],
+      ["addressLine1", "city", "state", "pincode"],
+      [], // Location Marking (handled via selectedLocation state)
+      ["agreeTerms"],
+    ],
+    picker: [
+      ["fullName", "mobile", "password", "confirmPassword"],
+      ["city", "operatingArea"],
+      [], // Availability (optional checkboxes)
+      ["idType", "idNumber"],
+      ["agreeTerms", "consentLocation"],
+    ],
+  };
+
   const currentSteps = selectedRole ? steps[selectedRole] : [];
 
-  const onNext = async () => {
-    let fieldsToValidate = [];
+  const isStepDisabled = () => {
+    if (!selectedRole) return true;
 
-    if (selectedRole === "user") {
-      switch (currentStep) {
-        case 0:
-          fieldsToValidate = [
-            "fullName",
-            "email",
-            "mobile",
-            "password",
-            "confirmPassword",
-          ];
-          break;
-        case 1:
-          fieldsToValidate = ["addressLine1", "city", "state", "pincode"];
-          break;
-        case 2:
-          // Location marking step - validate location is selected
-          if (!selectedLocation) {
-            return; // Don't proceed if no location selected
-          }
-          fieldsToValidate = [];
-          break;
-        default:
-          break;
-      }
-    } else if (selectedRole === "picker") {
-      switch (currentStep) {
-        case 0:
-          fieldsToValidate = [
-            "fullName",
-            "mobile",
-            "password",
-            "confirmPassword",
-          ];
-          break;
-        case 1:
-          fieldsToValidate = ["city", "operatingArea"];
-          break;
-        case 3:
-          fieldsToValidate = ["idType", "idNumber", "idDocument"];
-          break;
-        default:
-          break;
-      }
+    const fields = stepFields[selectedRole][currentStep];
+
+    // Special case for User Location Step
+    if (selectedRole === "user" && currentStep === 2) {
+      return !selectedLocation;
     }
 
-    const isValid = await trigger(fieldsToValidate);
+    // For other steps, check if all fields have values and no errors
+    if (fields && fields.length > 0) {
+      const formValues = watch(fields);
+      // Check if any field is empty
+      const isComplete = fields.every((field) => {
+        const val = watch(field);
+        return val && val.toString().trim().length > 0;
+      });
 
-    if (isValid && currentStep < currentSteps.length - 1) {
+      // Check if any current field has an error
+      const hasErrors = fields.some((field) => !!errors[field]);
+
+      return !isComplete || hasErrors;
+    }
+
+    return false;
+  };
+
+  const onNext = async () => {
+    const fieldsToValidate = stepFields[selectedRole][currentStep];
+
+    const isValidStep =
+      fieldsToValidate.length > 0 ? await trigger(fieldsToValidate) : true;
+
+    if (isValidStep && currentStep < currentSteps.length - 1) {
       setCurrentStep(currentStep + 1);
     }
   };
@@ -100,6 +104,11 @@ const Registration = () => {
   const onSubmit = async (data) => {
     console.log(`${selectedRole} Registration:`, data);
     // API call here
+    if (selectedRole === "user") {
+      // Add coordinates to submission
+      data.coordinates = selectedLocation.coordinates;
+      data.formattedAddress = selectedLocation.address;
+    }
   };
 
   const handleRoleChange = (role) => {
@@ -130,8 +139,8 @@ const Registration = () => {
             animate="visible"
             variants={bannerVariants}
           >
-            <img src={AuthenticationSvg} alt="Registration" />
-            <p className="bannerText">Join our waste management network</p>
+            <img src={PersonalInfoSvg} alt="Registration" />
+            <p className="bannerText">Create your account in minutes</p>
           </motion.div>
 
           <motion.div
@@ -141,9 +150,9 @@ const Registration = () => {
             animate="visible"
             variants={bannerVariants}
           >
-            <img src={DeliveryTruckSvg} alt="Service" />
+            <img src={CleanUpSvg} alt="Service" />
             <p className="bannerText">
-              Making waste management easier for everyone
+              Cleaner surroundings, better waste handling
             </p>
           </motion.div>
         </div>
@@ -224,6 +233,8 @@ const Registration = () => {
                       register={register}
                       errors={errors}
                       watch={watch}
+                      totalSteps={currentSteps.length}
+                      stepName={currentSteps[currentStep]}
                     />
                   </motion.div>
                 )}
@@ -249,7 +260,7 @@ const Registration = () => {
                     onClick={onPrevious}
                     className="prevBtn"
                   >
-                    ← Previous
+                    <FiChevronLeft /> Previous
                   </button>
                 )}
 
@@ -258,14 +269,24 @@ const Registration = () => {
                     type="button"
                     onClick={onNext}
                     className="nextBtn"
-                    disabled={currentStep === 2 && !selectedLocation}
+                    disabled={isStepDisabled()}
                   >
-                    {currentStep === 2 && !selectedLocation
-                      ? "Select location to continue"
-                      : "Continue →"}
+                    {selectedRole === "user" &&
+                    currentStep === 2 &&
+                    !selectedLocation ? (
+                      "Select location to continue"
+                    ) : (
+                      <>
+                        Continue <FiChevronRight />
+                      </>
+                    )}
                   </button>
                 ) : (
-                  <button type="submit" className="submitBtn">
+                  <button
+                    type="submit"
+                    className="submitBtn"
+                    disabled={isStepDisabled()}
+                  >
                     Create Account
                   </button>
                 )}
