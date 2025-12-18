@@ -2,9 +2,6 @@ import { useForm } from "react-hook-form";
 import TextField from "../../shared/components/TextField/TextField";
 import PasswordField from "../../shared/components/PasswordField/PasswordField";
 import { FiUser, FiLock } from "react-icons/fi";
-import { FcGoogle } from "react-icons/fc";
-import { BsFacebook } from "react-icons/bs";
-import "./LoginForm.scss";
 
 const LoginForm = () => {
   const {
@@ -16,16 +13,6 @@ const LoginForm = () => {
   const onSubmit = async (data) => {
     console.log("Login data:", data);
     // call API here
-  };
-
-  const handleGoogleLogin = () => {
-    console.log("Google login clicked");
-    // Implement Google OAuth
-  };
-
-  const handleFacebookLogin = () => {
-    console.log("Facebook login clicked");
-    // Implement Facebook OAuth
   };
 
   return (

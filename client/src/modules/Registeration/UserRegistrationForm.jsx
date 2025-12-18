@@ -1,5 +1,4 @@
 import { useForm } from "react-hook-form";
-import { useState } from "react";
 import TextField from "../../shared/components/TextField/TextField";
 import PasswordField from "../../shared/components/PasswordField/PasswordField";
 import {
@@ -10,8 +9,6 @@ import {
   FiMapPin,
   FiMap,
   FiNavigation,
-  FiSearch,
-  FiArrowUpRight,
 } from "react-icons/fi";
 import currentLocationSvg from "../../assets/images/undraw_current-location.svg";
 import myCurrenrLocationSvg from "../../assets/images/undraw_my-current-location.svg";
