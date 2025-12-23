@@ -4,6 +4,7 @@ const {
   findUserByPhoneNumber,
 } = require("../services/auth.service");
 const { generateToken } = require("../utils/jwt");
+const bcrypt = require("bcrypt");
 
 const register = async (req, res, next) => {
   try {
@@ -71,6 +72,69 @@ const register = async (req, res, next) => {
   }
 };
 
+const login = async (req, res, next) => {
+  try {
+    const { email, password } = req.body;
+
+    // 1️⃣ Validation
+    if (!email || !password) {
+      return res.status(400).json({
+        success: false,
+        error: "VALIDATION_ERROR",
+        message: "Required fields are missing",
+        missingFields: {
+          email: !email,
+          password: !password,
+        },
+      });
+    }
+
+    // 2️⃣ Find user
+    const user = await findUserByEmail(email.toLowerCase());
+
+    if (!user) {
+      return res.status(401).json({
+        success: false,
+        error: "AUTH_FAILED",
+        message: "Invalid email or password",
+      });
+    }
+
+    // 3️⃣ Compare password
+    const isPasswordMatch = await bcrypt.compare(password, user.passwordHash);
+
+    if (!isPasswordMatch) {
+      return res.status(401).json({
+        success: false,
+        error: "AUTH_FAILED",
+        message: "Invalid email or password",
+      });
+    }
+
+    // 4️⃣ Generate token
+    const jwtToken = generateToken({ userId: user.id });
+
+    // 5️⃣ Success response
+    return res.status(200).json({
+      success: true,
+      message: "Login successful",
+      data: {
+        token: jwtToken,
+        user: {
+          id: user.id,
+          fullName: user.fullName,
+          email: user.email,
+          mobile: user.mobile,
+          registerType: user.registerType,
+        },
+      },
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
 module.exports = {
   register,
+  login,
 };
