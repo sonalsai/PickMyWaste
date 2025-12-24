@@ -1,10 +1,20 @@
-import { StrictMode } from 'react'
-import { createRoot } from 'react-dom/client'
-import './index.css'
-import App from './App.jsx'
+import { StrictMode } from "react";
+import { createRoot } from "react-dom/client";
+import "./index.css";
+import App from "./App.jsx";
+import { Provider } from "react-redux";
+import { store } from "./store/store.js";
+import Snackbar from "./shared/components/Snackbar/Snackbar.jsx";
+import Loader from "./shared/components/Loader/Loader.jsx";
 
-createRoot(document.getElementById('root')).render(
+const Main = () => (
   <StrictMode>
-    <App />
-  </StrictMode>,
-)
+    <Provider store={store}>
+      <Loader />
+      <App />
+      <Snackbar />
+    </Provider>
+  </StrictMode>
+);
+
+createRoot(document.getElementById("root")).render(<Main />);

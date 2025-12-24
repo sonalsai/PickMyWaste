@@ -1,9 +1,21 @@
 import { useForm } from "react-hook-form";
 import TextField from "../../shared/components/TextField/TextField";
 import PasswordField from "../../shared/components/PasswordField/PasswordField";
-import { FiMail, FiLock } from "react-icons/fi";
+import { FiMail, FiLock, FiLoader } from "react-icons/fi";
+import { login } from "../../services/authService";
+import { motion } from "framer-motion";
+
+import { useDispatch } from "react-redux";
+import {
+  signInStart,
+  signInSuccess,
+  signInFailure,
+} from "../../store/authSlice";
+import { setUser } from "../../store/userSlice";
+import { snackbarService } from "../../services/snackbarService";
 
 const LoginForm = () => {
+  const dispatch = useDispatch();
   const {
     register,
     handleSubmit,
@@ -14,7 +26,28 @@ const LoginForm = () => {
 
   const onSubmit = async (data) => {
     console.log("Login data:", data);
-    // call API here
+    try {
+      dispatch(signInStart());
+      const response = await login(data);
+      console.log(response);
+
+      if (response.token) {
+        sessionStorage.setItem("token", response.token);
+      }
+
+      // Dispatch to auth slice (for session state)
+      dispatch(signInSuccess(response.user));
+
+      // Dispatch to user slice (for detailed user info)
+      dispatch(setUser(response.user));
+
+      snackbarService.show("Login successful!", "success");
+    } catch (error) {
+      console.error(error);
+      const errorMessage = error.message || "Login failed";
+      dispatch(signInFailure(errorMessage));
+      snackbarService.show(errorMessage, "error");
+    }
   };
 
   return (
@@ -52,8 +85,32 @@ const LoginForm = () => {
       />
 
       {/* Submit */}
-      <button type="submit" disabled={!isValid} className="primary-btn">
-        {isSubmitting ? "Signing in..." : "Sign in"}
+      <button
+        type="submit"
+        disabled={!isValid || isSubmitting}
+        className="primary-btn"
+      >
+        {isSubmitting ? (
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              gap: "8px",
+            }}
+          >
+            <motion.div
+              animate={{ rotate: 360 }}
+              transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+              style={{ display: "flex" }}
+            >
+              <FiLoader />
+            </motion.div>
+            <span>Signing in...</span>
+          </div>
+        ) : (
+          "Sign in"
+        )}
       </button>
     </form>
   );
