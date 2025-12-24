@@ -1,14 +1,16 @@
 import { useForm } from "react-hook-form";
 import TextField from "../../shared/components/TextField/TextField";
 import PasswordField from "../../shared/components/PasswordField/PasswordField";
-import { FiUser, FiLock } from "react-icons/fi";
+import { FiMail, FiLock } from "react-icons/fi";
 
 const LoginForm = () => {
   const {
     register,
     handleSubmit,
     formState: { errors, isSubmitting, isValid },
-  } = useForm();
+  } = useForm({
+    mode: "onChange",
+  });
 
   const onSubmit = async (data) => {
     console.log("Login data:", data);
@@ -17,22 +19,18 @@ const LoginForm = () => {
 
   return (
     <form className="loginForm" onSubmit={handleSubmit(onSubmit)}>
-      {/* Username */}
+      {/* Email */}
       <TextField
-        id="username"
-        label="Username"
-        autoComplete="username"
-        icon={<FiUser />}
-        error={errors.username?.message}
-        {...register("username", {
-          required: "Username is required",
-          minLength: {
-            value: 6,
-            message: "Username must be at least 6 characters",
-          },
-          maxLength: {
-            value: 12,
-            message: "Username must be at most 12 characters",
+        id="email"
+        label="Email"
+        autoComplete="email"
+        icon={<FiMail />}
+        error={errors.email?.message}
+        {...register("email", {
+          required: "Email is required",
+          pattern: {
+            value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+            message: "Invalid email address",
           },
         })}
       />
