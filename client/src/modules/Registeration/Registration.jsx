@@ -128,7 +128,7 @@ const Registration = () => {
 
   return (
     <div className="registrationPage">
-      <Navbar showLinks={true} buttonText="Sign In" buttonLink="/login" />
+      <Navbar />
 
       <main>
         {/* Left Banner Section */}

@@ -1,85 +1,205 @@
-import React from "react";
-import { useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
+import { FiMenu, FiX } from "react-icons/fi";
+import LogoIcon from "../../assets/images/logo-icon.svg";
 import "./Navbar.scss";
 
-const Navbar = ({
-  showLinks = false,
-  buttonText = "Register",
-  buttonLink = "/register",
-}) => {
+const Navbar = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const [isScrolled, setIsScrolled] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [activeSection, setActiveSection] = useState("home");
+
+  // Determine page type based on current route
+  const isHomePage = location.pathname === "/";
+  const isLoginPage = location.pathname === "/login";
+  const isRegisterPage = location.pathname === "/register";
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 20);
+
+      // Only detect active section on home page
+      if (!isHomePage) return;
+
+      // Get all sections
+      const sections = ["home", "about", "how-it-works", "pricing", "contact"];
+      const scrollPosition = window.scrollY + 100; // Offset for navbar height
+
+      // Find which section is currently in view
+      for (const sectionId of sections) {
+        const element = document.getElementById(sectionId);
+        if (element) {
+          const { offsetTop, offsetHeight } = element;
+          if (
+            scrollPosition >= offsetTop &&
+            scrollPosition < offsetTop + offsetHeight
+          ) {
+            setActiveSection(sectionId);
+            break;
+          }
+        }
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [isHomePage]);
+
+  const navLinks = [
+    { name: "Home", href: "#home", id: "home" },
+    { name: "About", href: "#about", id: "about" },
+    { name: "How It Works", href: "#how-it-works", id: "how-it-works" },
+    { name: "Pricing", href: "#pricing", id: "pricing" },
+    { name: "Contact", href: "#contact", id: "contact" },
+  ];
+
+  const scrollToSection = (href) => {
+    if (href.startsWith("#")) {
+      // If not on home page, navigate to home first
+      if (!isHomePage) {
+        navigate("/");
+        // Wait for navigation then scroll
+        setTimeout(() => {
+          const element = document.querySelector(href);
+          if (element) {
+            element.scrollIntoView({ behavior: "smooth", block: "start" });
+          }
+        }, 100);
+      } else {
+        const element = document.querySelector(href);
+        if (element) {
+          element.scrollIntoView({ behavior: "smooth", block: "start" });
+        }
+      }
+      setIsMobileMenuOpen(false);
+    } else {
+      navigate(href);
+      setIsMobileMenuOpen(false);
+    }
+  };
+
+  // Determine button text and link based on current page
+  const getButtonConfig = () => {
+    if (isLoginPage) {
+      return { text: "Register", link: "/register" };
+    } else if (isRegisterPage) {
+      return { text: "Login", link: "/login" };
+    } else {
+      // Home page
+      return { text: "Book Pickup", link: "/register" };
+    }
+  };
+
+  const buttonConfig = getButtonConfig();
+  const showNavLinks = isHomePage;
+  const showLoginButton = isHomePage;
 
   return (
-    <header className="app-navbar">
+    <header
+      className={`app-navbar ${isScrolled ? "app-navbar--scrolled" : ""}`}
+      style={{ position: isHomePage ? "fixed" : "sticky" }}
+    >
       <div className="navbar-content">
         <div
           className="logo-section"
           onClick={() => navigate("/")}
           style={{ cursor: "pointer" }}
         >
-          {/* Simple Bin/Recycle Icon */}
-          <svg
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-            className="logo-icon"
-          >
-            <path
-              d="M4 10V20C4 20.5304 4.21071 21.0391 4.58579 21.4142C4.96086 21.7893 5.46957 22 6 22H18C18.5304 22 19.0391 21.7893 19.4142 21.4142C19.7893 21.0391 20 20.5304 20 20V10"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-            <path
-              d="M2 6H22"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-            <path
-              d="M8 6V4C8 3.46957 8.21071 2.96086 8.58579 2.58579C8.96086 2.21071 9.46957 2 10 2H14C14.5304 2 15.0391 2.21071 15.4142 2.58579C15.7893 2.96086 16 3.46957 16 4V6"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-            <path
-              d="M10 11V17"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-            <path
-              d="M14 11V17"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-          </svg>
+          <img src={LogoIcon} alt="Pick My Waste" className="logo-icon" />
           <span className="brand-name">Pick My Waste</span>
         </div>
 
-        {showLinks && (
+        {/* Desktop Navigation - Only show on home page */}
+        {showNavLinks && (
           <nav className="nav-links">
-            <a href="/how-it-works">How it works</a>
-            <a href="/pricing">Pricing</a>
-            <a href="/contact">Contact</a>
+            {navLinks.map((link) => (
+              <a
+                key={link.name}
+                href={link.href}
+                className={activeSection === link.id ? "active" : ""}
+                onClick={(e) => {
+                  e.preventDefault();
+                  scrollToSection(link.href);
+                }}
+              >
+                {link.name}
+              </a>
+            ))}
           </nav>
         )}
 
+        {/* Desktop Actions */}
         <div className="actions">
-          <button className="register-btn" onClick={() => navigate(buttonLink)}>
-            <span className="btn-text">{buttonText}</span>
-            <span className="btn-arrow">{buttonText} &rarr;</span>
+          {showLoginButton && (
+            <button className="login-btn" onClick={() => navigate("/login")}>
+              Login
+            </button>
+          )}
+          <button
+            className="register-btn"
+            onClick={() => navigate(buttonConfig.link)}
+          >
+            <span className="btn-text">{buttonConfig.text}</span>
+            <span className="btn-arrow">{buttonConfig.text} &rarr;</span>
           </button>
+
+          {/* Mobile Menu Toggle - Only show on home page */}
+          {showNavLinks && (
+            <button
+              className="mobile-toggle"
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              aria-label="Toggle menu"
+            >
+              {isMobileMenuOpen ? <FiX size={24} /> : <FiMenu size={24} />}
+            </button>
+          )}
         </div>
       </div>
+
+      {/* Mobile Menu - Only show on home page */}
+      {showNavLinks && isMobileMenuOpen && (
+        <div className="mobile-menu">
+          <nav className="mobile-nav-links">
+            {navLinks.map((link) => (
+              <a
+                key={link.name}
+                href={link.href}
+                className={activeSection === link.id ? "active" : ""}
+                onClick={(e) => {
+                  e.preventDefault();
+                  scrollToSection(link.href);
+                }}
+              >
+                {link.name}
+              </a>
+            ))}
+          </nav>
+          <div className="mobile-actions">
+            {showLoginButton && (
+              <button
+                className="mobile-login-btn"
+                onClick={() => {
+                  navigate("/login");
+                  setIsMobileMenuOpen(false);
+                }}
+              >
+                Login
+              </button>
+            )}
+            <button
+              className="mobile-register-btn"
+              onClick={() => {
+                navigate(buttonConfig.link);
+                setIsMobileMenuOpen(false);
+              }}
+            >
+              {buttonConfig.text}
+            </button>
+          </div>
+        </div>
+      )}
     </header>
   );
 };

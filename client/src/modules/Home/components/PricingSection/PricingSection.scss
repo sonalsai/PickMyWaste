@@ -1,0 +1,145 @@
+.pricing {
+  padding: 6rem 2rem;
+  background-color: var(--color-surface);
+
+  &__container {
+    max-width: 1280px;
+    margin: 0 auto;
+  }
+
+  &__header {
+    text-align: center;
+    margin-bottom: 4rem;
+    max-width: 700px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  &__title {
+    font-size: clamp(2rem, 4vw, 2.5rem);
+    font-weight: 700;
+    color: var(--color-text-primary);
+    margin-bottom: 1rem;
+  }
+
+  &__description {
+    font-size: var(--font-size-lg);
+    line-height: 1.7;
+    color: var(--color-text-secondary);
+  }
+
+  &__cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    align-items: start;
+  }
+}
+
+.pricing-card {
+  background: white;
+  padding: 2.5rem;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  border: 2px solid var(--color-divider);
+  transition: all var(--transition-base);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+
+  &:hover {
+    box-shadow: var(--shadow-lg);
+    border-color: var(--color-primary-light);
+  }
+
+  &--popular {
+    border-color: var(--color-primary);
+    box-shadow: var(--shadow-lg);
+    transform: scale(1.05);
+
+    @media (max-width: 767px) {
+      transform: scale(1);
+    }
+
+    &:hover {
+      box-shadow: var(--shadow-xl);
+    }
+  }
+
+  &__badge {
+    position: absolute;
+    top: -12px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: linear-gradient(
+      135deg,
+      var(--color-primary),
+      var(--color-primary-dark)
+    );
+    color: white;
+    padding: 0.5rem 1.5rem;
+    border-radius: var(--radius-full);
+    font-size: var(--font-size-sm);
+    font-weight: 600;
+    box-shadow: var(--shadow-md);
+  }
+
+  &__header {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  &__name {
+    font-size: var(--font-size-2xl);
+    font-weight: 700;
+    color: var(--color-text-primary);
+  }
+
+  &__description {
+    font-size: var(--font-size-base);
+    color: var(--color-text-secondary);
+  }
+
+  &__price {
+    display: flex;
+    align-items: baseline;
+    gap: 0.5rem;
+  }
+
+  &__amount {
+    font-size: clamp(2.5rem, 5vw, 3rem);
+    font-weight: 800;
+    color: var(--color-primary);
+  }
+
+  &__period {
+    font-size: var(--font-size-base);
+    color: var(--color-text-secondary);
+  }
+
+  &__features {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    flex-grow: 1;
+  }
+
+  &__feature {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: var(--font-size-base);
+    color: var(--color-text-secondary);
+  }
+
+  &__check {
+    color: var(--color-success);
+    font-size: 1.25rem;
+    flex-shrink: 0;
+  }
+}

@@ -29,7 +29,7 @@ const Login = () => {
 
   return (
     <div className="loginPage">
-      <Navbar showLinks={true} />
+      <Navbar />
       <main>
         <motion.div
           className="loginFormSection"

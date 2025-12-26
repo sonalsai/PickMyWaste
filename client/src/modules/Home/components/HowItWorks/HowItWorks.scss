@@ -1,0 +1,142 @@
+.how-it-works {
+  padding: 6rem 2rem;
+  background: linear-gradient(135deg, #f9fbfa 0%, #e8f5e9 100%);
+  position: relative;
+  overflow: hidden;
+
+  &__container {
+    max-width: 1280px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+  }
+
+  &__header {
+    text-align: center;
+    margin-bottom: 4rem;
+    max-width: 700px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  &__title {
+    font-size: clamp(2rem, 4vw, 2.5rem);
+    font-weight: 700;
+    color: var(--color-text-primary);
+    margin-bottom: 1rem;
+  }
+
+  &__description {
+    font-size: var(--font-size-lg);
+    line-height: 1.7;
+    color: var(--color-text-secondary);
+  }
+
+  &__steps {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    max-width: 900px;
+    margin: 0 auto;
+
+    @media (min-width: 768px) {
+      gap: 3rem;
+    }
+  }
+}
+
+.step-card {
+  background: white;
+  padding: 2rem;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  display: grid;
+  grid-template-columns: auto auto 1fr;
+  gap: 1.5rem;
+  align-items: center;
+  position: relative;
+  transition: all var(--transition-base);
+
+  &:hover {
+    transform: translateX(8px);
+    box-shadow: var(--shadow-lg);
+  }
+
+  @media (max-width: 767px) {
+    grid-template-columns: auto 1fr;
+    gap: 1rem;
+  }
+
+  &__number {
+    width: 50px;
+    height: 50px;
+    background: linear-gradient(
+      135deg,
+      var(--color-primary),
+      var(--color-primary-dark)
+    );
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    font-weight: 700;
+    flex-shrink: 0;
+
+    @media (max-width: 767px) {
+      width: 40px;
+      height: 40px;
+      font-size: 1.25rem;
+    }
+  }
+
+  &__icon {
+    width: 50px;
+    height: 50px;
+    background-color: var(--color-background-secondary);
+    color: var(--color-primary);
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    flex-shrink: 0;
+
+    @media (max-width: 767px) {
+      display: none;
+    }
+  }
+
+  &__content {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  &__title {
+    font-size: var(--font-size-xl);
+    font-weight: 600;
+    color: var(--color-text-primary);
+  }
+
+  &__description {
+    font-size: var(--font-size-base);
+    line-height: 1.6;
+    color: var(--color-text-secondary);
+  }
+
+  &__connector {
+    display: none;
+
+    @media (min-width: 768px) {
+      display: block;
+      position: absolute;
+      left: 25px;
+      bottom: -3rem;
+      width: 2px;
+      height: 3rem;
+      background: linear-gradient(to bottom, var(--color-primary), transparent);
+    }
+  }
+}
